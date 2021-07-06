@@ -1,2 +1,2 @@
 # DataStore3
-Data storage system for ROBLOX using sql
+Data storage system for ROBLOX using SQL
