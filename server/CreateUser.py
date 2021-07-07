@@ -60,4 +60,4 @@ Username: {username}
 Password: {password}
 """)
 
-input(" ")
+input("Press Enter to continue..")
