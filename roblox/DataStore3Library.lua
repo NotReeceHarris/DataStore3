@@ -44,18 +44,28 @@ DataStore3.PostPayload = function(hostname, apiKey, username, payload)
 			HttpService:UrlEncode(v)
 		)
 	end
+	
 
 	----------------- Sends a post request to the database
+	
+	local response = HttpService:PostAsync(url, data, Enum.HttpContentType.ApplicationUrlEncoded, false)
+	local data = HttpService:JSONDecode(response)
+	
+	----------------- Print SQL error Code
+	
+	if data.ReturnCode == 0 then
+		print("!! SQL ERROR !! -"..data.ErrorCode)
+	end
 
 
-	return HttpService:PostAsync(url, data, Enum.HttpContentType.ApplicationUrlEncoded, false)
+	return data
 end
 
 ---------------------------------------------------------------------------------------------------------------- Get Request
 
 DataStore3.GetPayload = function(hostname, apiKey, username, payload)
 	local HttpService = game:GetService("HttpService")
-	local url = "http://"..hostname.."/api/payload/post/"
+	local url = "http://"..hostname.."/api/payload/get/"
 
 	----------------- Encodes the data into a json form format
 
@@ -71,11 +81,20 @@ DataStore3.GetPayload = function(hostname, apiKey, username, payload)
 			HttpService:UrlEncode(v)
 		)
 	end
-
+	
 	----------------- Sends a post request to the database
+	
+	local response = HttpService:PostAsync(url, data, Enum.HttpContentType.ApplicationUrlEncoded, false)
+	local data = HttpService:JSONDecode(response)
+	
+	----------------- Print SQL error Code
+	
+	if data.ReturnCode == 0 then
+		print("!! SQL ERROR !! -"..data.ErrorCode)
+	end
 
 
-	return HttpService:GetAsync(url, data, Enum.HttpContentType.ApplicationUrlEncoded, false)
+	return data
 end
 
 
