@@ -1,3 +1,4 @@
 {
-    "ipfilter": true
+    "ipfilter": false,
+    "hostname": "localhost"
 }
