@@ -1,4 +1,6 @@
 {
     "ipfilter": false,
-    "hostname": "localhost"
+    "hostname": "localhost",
+    "port": 80,
+    "debug": false
 }
