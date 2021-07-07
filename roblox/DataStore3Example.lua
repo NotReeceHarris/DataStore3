@@ -11,20 +11,45 @@ local apiKey = ""
 -- Database owner username (not roblox username)
 local username = ""
 
--- Sql Code payload
-local payload = [[
-CREATE TABLE test (
-	lorem VARCHAR(10) NOT NULL UNIQUE,
-	ipsum INT(10) NOT NULL,
-	dolor VARCHAR(40),
-	sit	LONGBLOB, 
-	amet BOOLEAN,
-	
-	PRIMARY KEY (lorem)
-)
-]]
+local Players = game:GetService("Players")
 
+Players.PlayerAdded:Connect(function(player)
+	local userid = player.UserId
+	local payload = "SELECT * FROM userData WHERE userId ='"..userid.."'"
+	local response = DataStore3.GetPayload(url, apiKey, username, payload)
 
--- DataStore3.PostPayload(url, apiKey, username, payload);
--- DataStore3.GetPayload(url, apiKey, username, payload);
--- DataStore3.TestFunction();
+	if response.Response == nil then
+		local payload = "INSERT INTO userData VALUES ('"..userid.."', '', '', '')"
+		local response = DataStore3.PostPayload(url, apiKey, username, payload)
+	else
+		local payload = "SELECT * FROM userData WHERE userId = '"..player.UserId.."'"
+		local response = DataStore3.GetPayload(url, apiKey, username, payload)
+		print(response)
+		print(response.Response)
+		
+		player.leaderstats.Gold.Value = response.Response[1][2]
+		player.leaderstats.Gems.Value = response.Response[1][4]
+		player.Inventory.Wood.Value = response.Response[1][3]
+	end
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+	gold = player.leaderstats.Gold.Value
+	gems = player.leaderstats.Gems.Value
+	wood = player.Inventory.Wood.Value
+	local payload = "UPDATE userData SET gold ='"..gold.."', wood ='"..wood.."', gems='"..gems.."' WHERE userId = '"..player.UserId.."';"
+	local response = DataStore3.PostPayload(url, apiKey, username, payload)
+end)
+
+local run = false
+
+while run do
+	for i,v in pairs(game.Players:GetChildren()) do
+		gold = v.leaderstats.Gold.Value
+		gems = v.leaderstats.Gems.Value
+		wood = v.Inventory.Wood.Value
+		local payload = "UPDATE userData SET gold ='"..gold.."', wood ='"..wood.."', gems='"..gems.."' WHERE userId = '"..v.UserId.."';"
+		local response = DataStore3.PostPayload(url, apiKey, username, payload)
+	end
+	wait(15)
+end
