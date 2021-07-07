@@ -10,6 +10,7 @@
 -- Create by Reece Harris (https://github.com/NotReeceHarris) & Deven Briers (https://github.com/NotDevenBriers)
 -- This service is a SQL datastore for roblox, allowing multiple users to create multiple databases.
 -- $Apache2 License.
+-- https://github.com/NotReeceHarris/DataStore3
 
 -- DO NOT MODIFY THIS FILE UNLESS YOU KNOW WHAT YOUR DOING!
 
