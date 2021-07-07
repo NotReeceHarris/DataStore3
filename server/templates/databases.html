@@ -1,0 +1,361 @@
+<!--
+$$$$$$$\             $$\                $$$$$$\    $$\                                          $$$$$$\  
+$$  __$$\            $$ |              $$  __$$\   $$ |                                        $$ ___$$\ 
+$$ |  $$ | $$$$$$\ $$$$$$\    $$$$$$\  $$ /  \__|$$$$$$\    $$$$$$\   $$$$$$\   $$$$$$\        \_/   $$ |
+$$ |  $$ | \____$$\\_$$  _|   \____$$\ \$$$$$$\  \_$$  _|  $$  __$$\ $$  __$$\ $$  __$$\         $$$$$ / 
+$$ |  $$ | $$$$$$$ | $$ |     $$$$$$$ | \____$$\   $$ |    $$ /  $$ |$$ |  \__|$$$$$$$$ |        \___$$\ 
+$$ |  $$ |$$  __$$ | $$ |$$\ $$  __$$ |$$\   $$ |  $$ |$$\ $$ |  $$ |$$ |      $$   ____|      $$\   $$ |
+$$$$$$$  |\$$$$$$$ | \$$$$  |\$$$$$$$ |\$$$$$$  |  \$$$$  |\$$$$$$  |$$ |      \$$$$$$$\       \$$$$$$  |
+\_______/  \_______|  \____/  \_______| \______/    \____/  \______/ \__|       \_______|       \______/ 
+
+Create by Reece Harris (https://github.com/NotReeceHarris) & Deven Briers (https://github.com/NotDevenBriers)
+This service is a SQL datastore for roblox, allowing multiple users to create multiple databases.
+- Apache2 License.
+https://github.com/NotReeceHarris/DataStore3
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Reece Harris, Deven Briers and Contributors at https://github.com/NotReeceHarris/DataStore3">
+    <title>Dashboard - DataBases
+    </title>
+    <!-- Bootstrap core CSS -->
+    <link href="{{url_for("static", filename="css/style.css")}}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css"rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="{{url_for("static", filename="css/dashboard.css")}}" rel="stylesheet">
+  </head>
+  <body>
+    <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+      <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#"> <img src="{{url_for("static", filename="DataStoreLogo.png")}}" height="35" width="35"> <span style="font-size: large;">DataStore3</span>
+      </a>
+      <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon">
+        </span>
+      </button>
+      <div class="navbar-nav">
+        <div class="nav-item text-nowrap">
+          <a class="nav-link px-3" style="color: white;"  href="{{url_for("Signout")}}">Sign out
+          </a>
+        </div>
+      </div>
+    </header>
+    <div class="container-fluid">
+      <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+          <div class="position-sticky pt-3">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="{{url_for("index")}}">
+                  <span data-feather="home">
+                  </span>
+                  Dashboard
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{url_for("apikey")}}">
+                  <span data-feather="key">
+                  </span>
+                  Api Keys
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="{{url_for("databases")}}">
+                  <span data-feather="hard-drive">
+                  </span>
+                  DataBases
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="edit-2">
+                  </span>
+                  Database Editor (Coming soon)
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{url_for("integrations")}}">
+                  <span data-feather="layers">
+                  </span>
+                  Integrations
+                </a>
+              </li>
+            </ul>
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              <span>Your Active DataBases
+              </span>
+              </a>
+            </h6>
+          <ul class="nav flex-column mb-2">
+            {%for x in databases["databases"]%}
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span data-feather="database">
+                </span>
+                {{x["name"]}}
+              </a>
+            </li>
+            {%endfor%}
+          </ul>
+          </div>
+        </nav>
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">My DataBases
+          </h1>
+          <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group me-2">
+              <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#staticBackdropCreate">
+                Create
+              </button>
+              <!-- Modal -->
+              <div class="modal fade" id="staticBackdropCreate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="staticBackdropLabel">Create Database
+                      </h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="mb-3">
+                        <form action = "{{url_for("newDataBase")}}" method = "POST">
+                          <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="DataBase Name" name="dbname" aria-label="DataBase Name" aria-describedby="button-addon2">
+                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Submit
+                            </button>
+                          </div>
+                        </form>   
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#staticBackdropImport">
+                Import
+              </button>
+              <!-- Modal -->
+              <div class="modal fade" id="staticBackdropImport" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="staticBackdropLabel">Import SQLITE3 file
+                      </h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="mb-3">
+                        <form action = "{{url_for("importPost")}}" method = "POST" enctype = "multipart/form-data">
+                          <input class="form-control" type="file" id="formFile" name = "file" accept=".db">
+                          <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="DataBase Name" name="filename" aria-label="DataBase Name" aria-describedby="button-addon2">
+                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Submit
+                            </button>
+                          </div>
+                        </form>   
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% with messages = get_flashed_messages() %}{% if messages %}{% for message in messages %}
+        <div class="alert alert-primary" role="alert">{{ message }}
+        </div>
+        {% endfor %}{% endif %}{% endwith %}{% block body %}{% endblock %}
+        <div class="table-responsive">
+          <table class="table table-striped table-sm">
+            <thead>
+              <tr>
+                <th scope="col">#
+                </th>
+                <th scope="col">ID
+                </th>
+                <th scope="col">Name
+                </th>
+                <th scope="col">Tables
+                </th>
+                <th scope="col">Config
+                </th>
+                <th scope="col">Export
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for x in databases["databases"]%}
+              <tr>
+                <td>{{loop.index}}
+                </td>
+                <td>{{x["id"]}}
+                </td>
+                <td>{{x["name"]}}
+                </td>
+                <td>{{x["tablelen"]}}
+                </td>
+                <td>
+                  <a class="btn btn-primary" data-mdb-toggle="modal" href="#modal{{loop.index}}" role="button">
+                    <span data-feather="tool">
+                    </span>
+                  </a>
+                </td>
+                <td>
+                  <a class="btn btn-primary" href="{{url_for('exportGet', id=x["id"], name=x["name"])}}">
+                    <span data-feather="share">
+                    </span>
+                  </a> 
+                </td>
+              </tr>
+              <!-- First modal dialog -->
+              <div
+                   class="modal fade"
+                   id="modal{{loop.index}}"
+                   aria-hidden="true"
+                   aria-labelledby="modal{{loop.index}}label"
+                   tabindex="-1"
+                   >
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalToggleLabel1">{{x["name"]}}
+                      </h5>
+                      <button
+                              type="button"
+                              class="btn-close"
+                              data-mdb-dismiss="modal"
+                              aria-label="Close"
+                              >
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <center>
+                        <button class="btn btn-success" data-mdb-target="#renamemodal{{loop.index}}" data-mdb-toggle="modal" data-mdb-dismiss="modal">Rename
+                        </button>
+                        <button class="btn btn-danger" data-mdb-target="#deletemodal{{loop.index}}" data-mdb-toggle="modal" data-mdb-dismiss="modal">Delete
+                        </button>
+                      </center>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Delete modal dialog -->
+              <div
+                   class="modal fade"
+                   id="deletemodal{{loop.index}}"
+                   aria-hidden="true"
+                   aria-labelledby="deletelabel{{loop.index}}"
+                   tabindex="-1"
+                   >
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalToggleLabel22">Confirmation
+                      </h5>
+                      <button
+                              type="button"
+                              class="btn-close"
+                              data-mdb-dismiss="modal"
+                              aria-label="Close"
+                              >
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <strong>Are you sure you want to delete {{x["name"]}} this is irraversable and all backups will be erased.
+                      </strong>
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                              class="btn btn-danger"
+                              data-mdb-target="#modal{{loop.index}}"
+                              data-mdb-toggle="modal"
+                              data-mdb-dismiss="modal"
+                              >
+                        NO
+                      </button>
+                      <a
+                         class="btn btn-success"
+                         href="{{url_for('deleteDb', id=x["id"], name=x["name"])}}"
+                         >
+                        YES
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- rename modal dialog -->
+              <div
+                   class="modal fade"
+                   id="renamemodal{{loop.index}}"
+                   aria-hidden="true"
+                   aria-labelledby="renamemodal{{loop.index}}label"
+                   tabindex="-1"
+                   >
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="renamemodal{{loop.index}}label">Input new name
+                      </h5>
+                      <button
+                              type="button"
+                              class="btn-close"
+                              data-mdb-dismiss="modal"
+                              aria-label="Close"
+                              >
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form action="{{url_for("renameDb")}}" method="POST">
+                        <div class="input-group mb-3">
+                          <input type="text" class="form-control" placeholder="New DataBase Name" name="newname" aria-label="New DataBase Name" aria-describedby="button-addon2">
+                          <input type="hidden" name="oldname" value="{{x["name"]}}">
+                          <input type="hidden" name="id" value="{{x["id"]}}">
+                          <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Rename
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+    </div>
+  <script type="text/javascript"src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js">
+  </script>
+  <script type="text/javascript"src="{{url_for("static", filename="js/script.js")}}">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+  </script>
+  <script>feather.replace({
+      'aria-hidden': 'true' }
+                         )</script>
+  </body>
+</html>
