@@ -3,5 +3,5 @@
 
 
 # DataStore3
-Data storage system for ROBLOX using SQL
+This is a modular way of storing data from your roblox experience using an SQL Database.
 
