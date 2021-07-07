@@ -1,1 +1,2 @@
 flask=<2.0.1
+flask_assets=<2.0
