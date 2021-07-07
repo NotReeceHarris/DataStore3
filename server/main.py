@@ -230,10 +230,10 @@ def loginPost():
     conn = sqlite3.connect('SqliteStorage/userCreds.db')
     c = conn.cursor()
     c.execute(f'SELECT * FROM members WHERE _username="{request.form["username"]}"')
-    responce = c.fetchone()
+    response = c.fetchone()
 
-    if responce != []:
-        if responce[2] == hashlib.sha256(request.form["password"].encode('ascii')).hexdigest():
+    if response != []:
+        if response[2] == hashlib.sha256(request.form["password"].encode('ascii')).hexdigest():
             session["logedin"] = True
             session["username"] = request.form["username"]
             return redirect(url_for("index"))
@@ -353,11 +353,11 @@ def apiPayloadPost():
     dbfile = ""
     if apikey == []:
         print("hi2")
-        return "Invalid ApiKey", 401
+        return jsonify({"ReturnCode": 0, "ErrorCode":"Invalid Api Key"}), 401
     else:
         if Key == None or Payload == None:
             print("hi4")
-            return "Invalid Arguments", 500
+            return jsonify({"ReturnCode": 0, "ErrorCode":"Missing Attributes"}), 505
         else:
             path = f"SqliteStorage\\{Username}"
             for root, dirs, files in os.walk(path):
@@ -365,18 +365,18 @@ def apiPayloadPost():
                     if filename.startswith(apikey[0]):
                         dbfile = filename
             if dbfile == None:
-                return "System Error, Contact System Admin (Missing database file)", 500
+                return jsonify({"ReturnCode": 0, "ErrorCode":"Missing database files, message a system admin"}), 505
             conn = sqlite3.connect(f'SqliteStorage/{Username}/{dbfile}')
             c = conn.cursor()
             c.execute("SELECT name FROM sqlite_master WHERE type='table';")
-            responce = c.fetchall()
+            response = c.fetchall()
             try:
-                responce = c.execute(Payload)
+                response = c.execute(Payload)
                 conn.commit()
                 conn.close()
                 return jsonify({"ReturnCode": 1}), 200
             except sqlite3.OperationalError as a:
-                return jsonify({"ReturnCode": 0, "Error": a}), 500
+                return jsonify({"ReturnCode": 0, "ErrorCode": str(a)}), 200
 
 
 @app.route('/api/payload/get/', methods=["POST"])
@@ -398,11 +398,11 @@ def apiPayloadGet():
     dbfile = ""
 
     if apikey == []:
-        return "Invalid ApiKey", 401
+        return jsonify({"ReturnCode": 0, "ErrorCode":"Invalid Api Key"}), 401
     else:
 
         if Key == None or Payload == None:
-            return "Invalid Arguments", 500
+            return jsonify({"ReturnCode": 0, "ErrorCode":"Missing Attributes"}), 505
         else:
             path = f"SqliteStorage\\{Username}"
             for root, dirs, files in os.walk(path):
@@ -410,20 +410,23 @@ def apiPayloadGet():
                      if filename.startswith(apikey[0]):
                         dbfile = filename
             if dbfile == None:
-                return "System Error, Contact System Admin (Missing database file)", 500
+                return jsonify({"ReturnCode": 0, "ErrorCode":"Missing database files, message a system admin"}), 505
 
             conn = sqlite3.connect(f'SqliteStorage/{Username}/{dbfile}')
             c = conn.cursor()
             c.execute("SELECT name FROM sqlite_master WHERE type='table';")
-            responce = c.fetchall()
-
+            response = c.fetchall()
             try:
                 c.execute(Payload)
-                responce = c.fetchall()
-                return jsonify({"ReturnCode": 1, "Responce":responce}), 200
+                response = c.fetchall()
+
+                if response == []:
+                    response = None
+
+                return jsonify({"ReturnCode": 1, "Response":response}), 200
             except sqlite3.OperationalError as a:
-                return jsonify({"ReturnCode": 0, "Error": a}), 500
+                return jsonify({"ReturnCode": 0, "ErrorCode": str(a)}), 200
 
 #-------------------------------------------------------------------------------------------
 if __name__ == "__main__":
-    app.run(host="192.168.1.95", port=80, debug=True)
+    app.run(host="localhost", port=80, debug=False)
