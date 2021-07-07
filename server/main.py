@@ -20,11 +20,12 @@ import hashlib
 import json
 import datetime
 import random
+import string
 import os
 
 app = Flask(__name__)
 app.permanent_session_lifetime = datetime.timedelta(days=365)
-app.secret_key = "ChangeThis".encode('ascii')
+app.secret_key = ''.join(random.choice(string.ascii_letters) for i in range(100)).encode('ascii')
 
 @app.route('/')
 def index():
@@ -429,4 +430,4 @@ def apiPayloadGet():
 
 #-------------------------------------------------------------------------------------------
 if __name__ == "__main__":
-    app.run(host="localhost", port=80, debug=False)
+    app.run(host="localhost", port=80, debug=True)
