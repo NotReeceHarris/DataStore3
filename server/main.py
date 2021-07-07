@@ -430,4 +430,7 @@ def apiPayloadGet():
 
 #-------------------------------------------------------------------------------------------
 if __name__ == "__main__":
-    app.run(host="localhost", port=80, debug=True)
+    hostname = json.load(open("config.json"))["hostname"]
+    port = json.load(open("config.json"))["port"]
+    debug = json.load(open("config.json"))["debug"]
+    app.run(host=hostname, port=port, debug=debug)
