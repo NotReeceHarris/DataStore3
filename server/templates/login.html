@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{url_for('static', filename='DataStoreLogo.png')}}">
     <title>Login</title>
 
 <link href="{{url_for('static', filename='css/style.css')}}" rel="stylesheet" type="text/css" />
@@ -14,23 +15,26 @@
 </head>
 <body>
 
+
     <div class="container">
-        <form style="margin-top: 25%;" method="POST" action="{{url_for("loginPost")}}">
+        <form style="margin-top: 10%;" method="POST" action="{{url_for("loginPost")}}">
+          <center> <a href="https://github.com/NotReeceHarris/DataStore3"><img src="https://i.imgur.com/pch9ykm.png" width="180" hight="180"></a> </center>
             <div class="mb-3">
               <label for="inputUserName" class="form-label">UserName</label>
               <input type="text" class="form-control" name="username" id="inputUserName" aria-describedby="UserNameHelp">
-              <div id="UserNameHelp" class="form-text">We wont share any information outside techonaut.</div>
+              <div id="UserNameHelp" class="form-text">Ask a system admin to create you an account.</div>
             </div>
             <div class="mb-3">
               <label for="inputPassword" class="form-label">Password</label>
               <input type="password" class="form-control" name="password" id="inputPassword">
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-danger">Submit</button>
               {% with messages = get_flashed_messages() %}{% if messages %}{% for message in messages %}
               <div class="alert alert-primary" role="alert">{{ message }}</div>
               {% endfor %}{% endif %}{% endwith %}{% block body %}{% endblock %}
           </form>
       </div>
+ 
 
 </body>
 <script src="{{url_for('static', filename='js/script.js')}}"></script>

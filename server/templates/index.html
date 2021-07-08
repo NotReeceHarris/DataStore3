@@ -19,6 +19,7 @@ https://github.com/NotReeceHarris/DataStore3
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="Reece Harris, Deven Briers and Contributors at https://github.com/NotReeceHarris/DataStore3">
+    <link rel="icon" href="{{url_for('static', filename='DataStoreLogo.png')}}">
     <title>Dashboard - Home
     </title>
     <!-- Bootstrap core CSS -->
@@ -45,7 +46,7 @@ https://github.com/NotReeceHarris/DataStore3
   </head>
   <body>
     <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-      <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#"> <img src="{{url_for("static", filename="DataStoreLogo.png")}}" height="35" width="35"> <span style="font-size: large;font-family: 'Roboto', sans-serif;">DataStore3</span>
+      <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="https://github.com/NotReeceHarris/DataStore3"> <img src="{{url_for("static", filename="DataStoreLogo.png")}}" height="35" width="35"> <span style="font-size: large;font-family: 'Roboto', sans-serif;">DataStore3</span>
       </a>
       <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon">
@@ -64,7 +65,7 @@ https://github.com/NotReeceHarris/DataStore3
           <div class="position-sticky pt-3">
             <ul class="nav flex-column">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{{url_for("index")}}">
+                <a class="nav-link active" style="color: red" aria-current="page" href="{{url_for("index")}}">
                   <span data-feather="home">
                   </span>
                   Dashboard
@@ -92,7 +93,7 @@ https://github.com/NotReeceHarris/DataStore3
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{{url_for("integrations")}}">
+                <a class="nav-link" href="https://github.com/NotReeceHarris/DataStore3/wiki">
                   <span data-feather="layers">
                   </span>
                   Integrations
@@ -122,8 +123,63 @@ https://github.com/NotReeceHarris/DataStore3
           <h1 class="h2">Dashboard
           </h1>
         </div>
-        <h1>
-        </h1>
+
+
+
+        <!-- Bootstrap 5 Cards in Grid -->
+    <section class="py-4 my-5">
+      <div class="container">
+          <div class="row">
+
+            {% for x in databases["databases"] %}
+              <div class="col-md-6 col-lg-4"> 
+                  <div class="my-3">
+                      <div class="card-thumbnail">
+                        {% if x["size"] >= 0.15 %}
+                          <center><img src="{{url_for("static", filename="data4.png")}}" alt="thumbnail" width="150" height="200"></center>
+                        {% elif x["size"] >= 0.10 %}
+                          <center><img src="{{url_for("static", filename="data3.png")}}" alt="thumbnail" width="150" height="200"></center>
+                        {% elif x["size"] >= 0.05 %}
+                          <center><img src="{{url_for("static", filename="data2.png")}}" alt="thumbnail" width="150" height="200"></center>
+                        {% elif x["size"] >= 0.01 %}
+                          <center><img src="{{url_for("static", filename="data1.png")}}" alt="thumbnail" width="150" height="200"></center>
+                        {% else %}
+                          <center><img src="{{url_for("static", filename="data0.png")}}" alt="thumbnail" width="150" height="200"></center>
+                        {% endif %}
+                      </div>
+                      <div class="card-body">
+                          <h3 class="card-title"><center> <a href="#" style="color: rgb(214, 36, 36); font-weight: bolder;">{{x["name"]}}</a></center></h3>
+                          <center><p class="card-text">
+                            <button style="background-color: rgb(214, 36, 36);" type="button" class="btn btn-danger">{{x["size"]}} Mb</button>
+                            <button style="background-color: rgb(214, 36, 36);" onclick="copy{{loop.index}}()" id="id{{loop.index}}" class="btn btn-danger">Copy Id</button>
+                          </p></center>
+                      </div>
+                  </div>
+              </div>
+              <input style="display: none;" type="text" value="{{x["id"]}}" id="idHidden{{loop.index}}">
+              <script>
+                function copy{{loop.index}}() {
+  /* Get the text field */
+  var copyText = document.getElementById("idHidden{{loop.index}}");
+
+  /* Select the text field */
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+  /* Copy the text inside the text field */
+  document.execCommand("copy");
+}
+              </script>
+              {% endfor %}
+
+
+          </div>
+      </div>
+  </section>
+
+
+
+
       </main>
     </div>
     </div>

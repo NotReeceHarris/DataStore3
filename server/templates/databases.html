@@ -19,6 +19,7 @@ https://github.com/NotReeceHarris/DataStore3
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="Reece Harris, Deven Briers and Contributors at https://github.com/NotReeceHarris/DataStore3">
+    <link rel="icon" href="{{url_for('static', filename='DataStoreLogo.png')}}">
     <title>Dashboard - DataBases
     </title>
     <!-- Bootstrap core CSS -->
@@ -44,7 +45,7 @@ https://github.com/NotReeceHarris/DataStore3
   </head>
   <body>
     <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-      <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#"> <img src="{{url_for("static", filename="DataStoreLogo.png")}}" height="35" width="35"> <span style="font-size: large;">DataStore3</span>
+      <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="https://github.com/NotReeceHarris/DataStore3"> <img src="{{url_for("static", filename="DataStoreLogo.png")}}" height="35" width="35"> <span style="font-size: large;">DataStore3</span>
       </a>
       <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon">
@@ -77,7 +78,7 @@ https://github.com/NotReeceHarris/DataStore3
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="{{url_for("databases")}}">
+                <a class="nav-link active" style="color: red" href="{{url_for("databases")}}">
                   <span data-feather="hard-drive">
                   </span>
                   DataBases
@@ -91,7 +92,7 @@ https://github.com/NotReeceHarris/DataStore3
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{{url_for("integrations")}}">
+                <a class="nav-link" href="https://github.com/NotReeceHarris/DataStore3/wiki">
                   <span data-feather="layers">
                   </span>
                   Integrations
@@ -122,7 +123,7 @@ https://github.com/NotReeceHarris/DataStore3
           </h1>
           <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group me-2">
-              <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#staticBackdropCreate">
+              <button style="color:red; border-color: red;" type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#staticBackdropCreate">
                 Create
               </button>
               <!-- Modal -->
@@ -140,7 +141,7 @@ https://github.com/NotReeceHarris/DataStore3
                         <form action = "{{url_for("newDataBase")}}" method = "POST">
                           <div class="input-group mb-3">
                             <input type="text" class="form-control" placeholder="DataBase Name" name="dbname" aria-label="DataBase Name" aria-describedby="button-addon2">
-                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Submit
+                            <button style="color:red; border-color: red;" class="btn btn-outline-secondary" type="submit" id="button-addon2">Submit
                             </button>
                           </div>
                         </form>   
@@ -149,7 +150,7 @@ https://github.com/NotReeceHarris/DataStore3
                   </div>
                 </div>
               </div>
-              <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#staticBackdropImport">
+              <button style="color:red; border-color: red;" type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#staticBackdropImport">
                 Import
               </button>
               <!-- Modal -->
@@ -167,8 +168,8 @@ https://github.com/NotReeceHarris/DataStore3
                         <form action = "{{url_for("importPost")}}" method = "POST" enctype = "multipart/form-data">
                           <input class="form-control" type="file" id="formFile" name = "file" accept=".db">
                           <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="DataBase Name" name="filename" aria-label="DataBase Name" aria-describedby="button-addon2">
-                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Submit
+                            <input style="border-top:none;" type="text" class="form-control" placeholder="DataBase Name" name="filename" aria-label="DataBase Name" aria-describedby="button-addon2">
+                            <button style="color:red; border-color: red;" class="btn btn-outline-secondary" type="submit" id="button-addon2">Submit
                             </button>
                           </div>
                         </form>   
@@ -190,11 +191,13 @@ https://github.com/NotReeceHarris/DataStore3
               <tr>
                 <th scope="col">#
                 </th>
-                <th scope="col">ID
+                <th scope="col">Database ID
                 </th>
                 <th scope="col">Name
                 </th>
                 <th scope="col">Tables
+                </th>
+                <th scope="col">Size
                 </th>
                 <th scope="col">Config
                 </th>
@@ -213,14 +216,16 @@ https://github.com/NotReeceHarris/DataStore3
                 </td>
                 <td>{{x["tablelen"]}}
                 </td>
+                <td>{{x["size"]}} MB
+                </td>
                 <td>
-                  <a class="btn btn-primary" data-mdb-toggle="modal" href="#modal{{loop.index}}" role="button">
+                  <a class="btn btn-danger" data-mdb-toggle="modal" href="#modal{{loop.index}}" role="button">
                     <span data-feather="tool">
                     </span>
                   </a>
                 </td>
                 <td>
-                  <a class="btn btn-primary" href="{{url_for('exportGet', id=x["id"], name=x["name"])}}">
+                  <a class="btn btn-danger" href="{{url_for('exportGet', id=x["id"], name=x["name"])}}">
                     <span data-feather="share">
                     </span>
                   </a> 
