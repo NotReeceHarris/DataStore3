@@ -342,4 +342,13 @@ if __name__ == "__main__":
     if debug:
         app.run(host=hostname, port=port, debug=True)
     else:
+        RED = u'\u001b[31m'
+        REDBACK = u'\u001b[41m'
+        RESET = u'\u001b[0m'
+        print(f"""
+        {REDBACK}  {RESET} DataStore3
+        {RED}Host:{RESET}{hostname}
+        {RED}Port:{RESET}{port}
+        {RED}Url:{RESET}http://{hostname}:{port}
+        """)
         serve(app, host=hostname, port=port)
