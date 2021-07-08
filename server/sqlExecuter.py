@@ -1,3 +1,23 @@
+'''
+$$$$$$$\             $$\                $$$$$$\    $$\                                          $$$$$$\  
+$$  __$$\            $$ |              $$  __$$\   $$ |                                        $$ ___$$\ 
+$$ |  $$ | $$$$$$\ $$$$$$\    $$$$$$\  $$ /  \__|$$$$$$\    $$$$$$\   $$$$$$\   $$$$$$\        \_/   $$ |
+$$ |  $$ | \____$$\\_$$  _|   \____$$\ \$$$$$$\  \_$$  _|  $$  __$$\ $$  __$$\ $$  __$$\         $$$$$ / 
+$$ |  $$ | $$$$$$$ | $$ |     $$$$$$$ | \____$$\   $$ |    $$ /  $$ |$$ |  \__|$$$$$$$$ |        \___$$\ 
+$$ |  $$ |$$  __$$ | $$ |$$\ $$  __$$ |$$\   $$ |  $$ |$$\ $$ |  $$ |$$ |      $$   ____|      $$\   $$ |
+$$$$$$$  |\$$$$$$$ | \$$$$  |\$$$$$$$ |\$$$$$$  |  \$$$$  |\$$$$$$  |$$ |      \$$$$$$$\       \$$$$$$  |
+\_______/  \_______|  \____/  \_______| \______/    \____/  \______/ \__|       \_______|       \______/ 
+
+Create by Reece Harris (https://github.com/NotReeceHarris) & Deven Briers (https://github.com/NotDevenBriers)
+This service is a SQL datastore for roblox, allowing multiple users to create multiple databases.
+- Apache2 License.
+https://github.com/NotReeceHarris/DataStore3
+
+
+
+This code is open source, all backend SQL executions will stay up to date
+'''
+
 from flask import request, session, jsonify, Blueprint
 import sqlite3
 import json
