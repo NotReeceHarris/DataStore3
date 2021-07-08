@@ -41,9 +41,7 @@ Players.PlayerRemoving:Connect(function(player)
 	local response = DataStore3.PostPayload(url, apiKey, username, payload)
 end)
 
-local run = false
-
-while run do
+while true do
 	for i,v in pairs(game.Players:GetChildren()) do
 		gold = v.leaderstats.Gold.Value
 		gems = v.leaderstats.Gems.Value
@@ -51,5 +49,6 @@ while run do
 		local payload = "UPDATE userData SET gold ='"..gold.."', wood ='"..wood.."', gems='"..gems.."' WHERE userId = '"..v.UserId.."';"
 		local response = DataStore3.PostPayload(url, apiKey, username, payload)
 	end
-	wait(15)
+	print("Saved Successfully")
+	wait(30)
 end
