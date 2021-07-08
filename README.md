@@ -2,7 +2,7 @@
 
 ***
 
-[![CodeQL](https://github.com/NotReeceHarris/DataStore3/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/NotReeceHarris/DataStore3/actions/workflows/codeql-analysis.yml) [![DevSkim](https://github.com/NotReeceHarris/DataStore3/actions/workflows/devskim-analysis.yml/badge.svg)](https://github.com/NotReeceHarris/DataStore3/actions/workflows/devskim-analysis.yml) [![License](https://img.shields.io/badge/License-Apache2-blue.svg)](LICENSE)
+[![CodeQL](https://github.com/NotReeceHarris/DataStore3/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/NotReeceHarris/DataStore3/actions/workflows/codeql-analysis.yml) [![DevSkim](https://github.com/NotReeceHarris/DataStore3/actions/workflows/devskim-analysis.yml/badge.svg)](https://github.com/NotReeceHarris/DataStore3/actions/workflows/devskim-analysis.yml) [![SL Scan](https://github.com/NotReeceHarris/DataStore3/actions/workflows/shiftleft-analysis.yml/badge.svg)](https://github.com/NotReeceHarris/DataStore3/actions/workflows/shiftleft-analysis.yml) [![Security Scan](https://github.com/NotReeceHarris/DataStore3/actions/workflows/main.yml/badge.svg)](https://github.com/NotReeceHarris/DataStore3/actions/workflows/main.yml) [![License](https://img.shields.io/badge/License-Apache2-blue.svg)](LICENSE)
 
 # DataStore3
 This is a modular way of storing data from your roblox experience using an SQL Database. 
