@@ -2,5 +2,5 @@
     "ipfilter": false,
     "hostname": "localhost",
     "port": 80,
-    "debug": false
+    "debug": true
 }
