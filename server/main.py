@@ -32,7 +32,7 @@ from waitress import serve
 app = Flask(__name__)
 assets = Environment(app)
 app.permanent_session_lifetime = datetime.timedelta(days=365)
-app.secret_key = ''.join(random.choice(string.ascii_letters) for i in range(100)).encode('ascii')
+app.secret_key =  'abc123#'#''.join(random.choice(string.ascii_letters) for i in range(100)).encode('ascii')
 
 from sqlExecuter import SqlExecutionApi
 app.register_blueprint(SqlExecutionApi)
@@ -54,7 +54,9 @@ def index():
                         "id": filename[:40],
                         "name": filename[40:-3].upper(),
                         "tables": tables,
-                        "tablelen": len(tables)
+                        "tablelen": len(tables),
+                        "size": round(int(os.path.getsize(f"SqliteStorage/{ session['username']}/{filename}")) / 1048576, 2),
+                        "sizeb": os.path.getsize(f"SqliteStorage/{ session['username']}/{filename}")
                     }
                     dbdata["databases"].append(x)
             return render_template('index.html', databases=dbdata)
@@ -79,7 +81,8 @@ def databases():
                         "id": filename[:40],
                         "name": filename[40:-3].upper(),
                         "tables": tables,
-                        "tablelen": len(tables)
+                        "tablelen": len(tables),
+                        "size": round(int(os.path.getsize(f"SqliteStorage/{ session['username']}/{filename}")) / 1048576, 2)
                     }
                     dbdata["databases"].append(x)
             return render_template('databases.html', databases=dbdata)
@@ -130,32 +133,6 @@ def login(_other):
             return render_template('login.html', other=_other)
     else:
         return render_template('login.html', other=_other)
-
-@app.route('/integrations')
-def integrations():
-    if session != []:
-        if "logedin" in session:
-
-            path = f"SqliteStorage\\{session['username']}"
-            dbdata = {"databases": []}
-            for root, dirs, files in os.walk(path):
-                for filename in files:
-                    conn = sqlite3.connect(f'SqliteStorage/{session["username"]}/{filename}')
-                    c = conn.cursor()
-                    c.execute("SELECT name FROM sqlite_master WHERE type='table';")
-                    tables = c.fetchall()
-                    x = {
-                        "id": filename[:40],
-                        "name": filename[40:-3].upper(),
-                        "tables": tables,
-                        "tablelen": len(tables)
-                    }
-                    dbdata["databases"].append(x)
-            return render_template('integrations.html', databases=dbdata) 
-        else:
-            return redirect(url_for("login"))
-    else:
-        return redirect(url_for("login"))
 
 @app.errorhandler(404)
 def page_not_found(e): 
@@ -336,7 +313,11 @@ def importPost():
 
 
 if __name__ == "__main__":
-    hostname = json.load(open("config.json"))["hostname"]
+    import socket
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    hostname = s.getsockname()[0]
+    s.close()
     port = json.load(open("config.json"))["port"]
     debug = json.load(open("config.json"))["debug"]
     if debug:
