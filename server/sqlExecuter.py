@@ -39,16 +39,14 @@ def Ipfilter(ip):
 
 @SqlExecutionApi.route('/api/payload/post/', methods=["POST"])
 def apiPayloadPost():
-    time.sleep(0.01)
     
-
     if not Ipfilter(request.remote_addr):
         return jsonify({"ReturnCode": 0, "ErrorCode":"You are not roblox"}), 401
 
     Key = request.form["key"]
     Username = request.form["username"]
     Payload = request.form["payload"]
-    conn = sqlite3.connect(f'SqliteStorage/apiKeys.db')
+    conn = sqlite3.connect(f'SqliteStorage/apiKeys.db', timeout=10)
     c = conn.cursor()
     c.execute(f"SELECT * FROM Keys WHERE _key='{Key}'")
     apikey = c.fetchall()
@@ -65,26 +63,27 @@ def apiPayloadPost():
             path = f"SqliteStorage\\{Username}"
             for root, dirs, files in os.walk(path):
                 for filename in files:
-                    if filename.startswith(apikey[0]):
+                    if filename.startswith(apikey[0]) and filename.endswith(".db"):
                         dbfile = filename
             if dbfile == None:
                 return jsonify({"ReturnCode": 0, "ErrorCode":"Missing database files, message a system admin"}), 505
-            conn = sqlite3.connect(f'SqliteStorage/{Username}/{dbfile}')
+            conn = sqlite3.connect(f'SqliteStorage/{Username}/{dbfile}', timeout=10)
             c = conn.cursor()
             c.execute("SELECT name FROM sqlite_master WHERE type='table';")
             response = c.fetchall()
             try:
-                response = c.execute(Payload)
-                conn.commit()
+                SplitPayload = Payload.split(";")
+                for x in SplitPayload:
+                    response = c.execute(x)
+                    conn.commit()
                 conn.close()
                 return jsonify({"ReturnCode": 1}), 200
-            except sqlite3.OperationalError as a:
+            except (sqlite3.OperationalError, sqlite3.Warning) as a:
                 return jsonify({"ReturnCode": 0, "ErrorCode": str(a)}), 200
 
 
 @SqlExecutionApi.route('/api/payload/get/', methods=["POST"])
 def apiPayloadGet():
-    time.sleep(0.01)
     if not Ipfilter(request.remote_addr):
         return jsonify({"ReturnCode": 0, "ErrorCode":"You are not roblox"}), 401
 
@@ -92,7 +91,7 @@ def apiPayloadGet():
     Username = request.form["username"]
     Payload = request.form["payload"]
 
-    conn = sqlite3.connect(f'SqliteStorage/apiKeys.db')
+    conn = sqlite3.connect(f'SqliteStorage/apiKeys.db', timeout=10)
     c = conn.cursor()
     c.execute(f"SELECT * FROM Keys WHERE _key='{Key}'")
 
@@ -111,12 +110,12 @@ def apiPayloadGet():
             path = f"SqliteStorage\\{Username}"
             for root, dirs, files in os.walk(path):
                 for filename in files:
-                     if filename.startswith(apikey[0]):
+                     if filename.startswith(apikey[0]) and filename.endswith(".db"):
                         dbfile = filename
             if dbfile == None:
                 return jsonify({"ReturnCode": 0, "ErrorCode":"Missing database files, message a system admin"}), 505
 
-            conn = sqlite3.connect(f'SqliteStorage/{Username}/{dbfile}')
+            conn = sqlite3.connect(f'SqliteStorage/{Username}/{dbfile}', timeout=10)
             c = conn.cursor()
             c.execute("SELECT name FROM sqlite_master WHERE type='table';")
             response = c.fetchall()
