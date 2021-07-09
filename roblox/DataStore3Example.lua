@@ -43,7 +43,7 @@ Players.PlayerRemoving:Connect(function(player)  -- Player Leave function
 	gold = player.leaderstats.Gold.Value  -- Get players leaderstat values (Gold)
 	gems = player.leaderstats.Gems.Value  -- Get players leaderstat values (Gold)
 	wood = player.Inventory.Wood.Value  -- Get players leaderstat values (Gold)
-	local payload = "UPDATE userData SET gold ='"..gold.."' WHERE userId = '"..player.UserId.."';"  -- Update userData table and set Gold, Wood, Gems where usersId = Players userId
+	local payload = "UPDATE userData SET gold ='"..gold.."', wood ='"..wood.."', gems='"..gems.."' WHERE userId = '"..v.UserId.."';"  -- Update userData table and set Gold, Wood, Gems where usersId = Players userId
 	local response = DataStore3.PostPayload(payload)  -- Send the Post request to the server
 end)
 
