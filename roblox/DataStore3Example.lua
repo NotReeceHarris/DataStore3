@@ -49,9 +49,9 @@ end)
 
 while true do  -- Infinate Loop
 	for i,v in pairs(game.Players:GetChildren()) do  -- Get all active players in game
-		gold = v.leaderstats.Gold.Value  -- Get players Gold Value
-		gems = v.leaderstats.Gems.Value  -- Get players Gems Value
-		wood = v.Inventory.Wood.Value  -- Get players Wood Value
+		local gold = v.leaderstats.Gold.Value  -- Get players Gold Value
+		local gems = v.leaderstats.Gems.Value  -- Get players Gems Value
+		local wood = v.Inventory.Wood.Value  -- Get players Wood Value
 		local payload = "UPDATE userData SET gold ='"..gold.."', wood ='"..wood.."', gems='"..gems.."' WHERE userId = '"..v.UserId.."';" -- Update table called userData and set gold, wood and gems where usersId = players user id
 		local response = DataStore3.PostPayload(payload)  -- Send the Post request to the server
 	end
