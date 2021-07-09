@@ -16,27 +16,19 @@
 
 local DataStore3 = require(game:GetService("ServerScriptService").DataStore3Libary);  --Imports the DataStore3 libary
 
--- Database hostname eg. (IPV4, URL) [DO NOT INCLUDE HTTP:// OR WWW.]
-local url = ""
--- Key used to access database
-local apiKey = ""
--- Database owner username (not roblox username)
-local username = ""
-
-
 local Players = game:GetService("Players")
 
 Players.PlayerAdded:Connect(function(player)  -- Player Join function
 	local userid = player.UserId  -- Get UserId of joined player
 	local payload = "SELECT * FROM userData WHERE userId ='"..userid.."'"  -- Select all from userdata table where userId = players userid (SQL CODE)
-	local response = DataStore3.GetPayload(url, apiKey, username, payload)  -- Send the post request to the server
+	local response = DataStore3.GetPayload(payload)  -- Send the post request to the server
 
 	if response.Response == nil then  -- If the responce is nil (Meaning the player isnt already in the data base)
 		local payload = "INSERT INTO userData VALUES ('"..userid.."', '0', '0', '0')"  -- Add the player to the database making the first value the userId (SQL CODE)
-		local response = DataStore3.PostPayload(url, apiKey, username, payload)  -- Send the post request to the server
+		local response = DataStore3.PostPayload(payload)  -- Send the post request to the server
 	else  -- If the user is in the databse
 		local payload = "SELECT * FROM userData WHERE userId = '"..player.UserId.."'"  -- Select all data from the userdata table where userId = players userid (SQL CODE) 
-		local response = DataStore3.GetPayload(url, apiKey, username, payload)  -- Send the get request to the server
+		local response = DataStore3.GetPayload(payload)  -- Send the get request to the server
 		
 		-- When getting a responce there are to parts the the table 'response.Response[a][b]' A & B a is the selector for example if a was equal to 1 you would 
 		-- get the response code (1 is success and 0 is error) if a was equal to 2 you would get the SQL response for this example (userId, Gold, Wood, Gems)
@@ -52,7 +44,7 @@ Players.PlayerRemoving:Connect(function(player)  -- Player Leave function
 	gems = player.leaderstats.Gems.Value  -- Get players leaderstat values (Gold)
 	wood = player.Inventory.Wood.Value  -- Get players leaderstat values (Gold)
 	local payload = "UPDATE userData SET gold ='"..gold.."' WHERE userId = '"..player.UserId.."';"  -- Update userData table and set Gold, Wood, Gems where usersId = Players userId
-	local response = DataStore3.PostPayload(url, apiKey, username, payload)  -- Send the Post request to the server
+	local response = DataStore3.PostPayload(payload)  -- Send the Post request to the server
 end)
 
 while true do  -- Infinate Loop
@@ -61,7 +53,7 @@ while true do  -- Infinate Loop
 		gems = v.leaderstats.Gems.Value  -- Get players Gems Value
 		wood = v.Inventory.Wood.Value  -- Get players Wood Value
 		local payload = "UPDATE userData SET gold ='"..gold.."', wood ='"..wood.."', gems='"..gems.."' WHERE userId = '"..v.UserId.."';" -- Update table called userData and set gold, wood and gems where usersId = players user id
-		local response = DataStore3.PostPayload(url, apiKey, username, payload)  -- Send the Post request to the server
+		local response = DataStore3.PostPayload(payload)  -- Send the Post request to the server
 	end
 	print("Saved Successfully") -- Print to server 'Saved Successfully' only developers will see this as players cant access the server console
 	wait(30)  -- Wait 30 seconds to loop again
