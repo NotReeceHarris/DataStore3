@@ -27,12 +27,13 @@ import datetime
 import random
 import string
 import os
+from os import listdir
 from waitress import serve
 
 app = Flask(__name__)
 assets = Environment(app)
 app.permanent_session_lifetime = datetime.timedelta(days=365)
-app.secret_key =  ''.join(random.choice(string.ascii_letters) for i in range(100)).encode('ascii')
+app.secret_key =  "abc123#"#''.join(random.choice(string.ascii_letters) for i in range(100)).encode('ascii')
 
 from sqlExecuter import SqlExecutionApi
 app.register_blueprint(SqlExecutionApi)
@@ -44,21 +45,20 @@ def index():
         if "logedin" in session:
             path = f"SqliteStorage\\{session['username']}"
             dbdata = {"databases": []}
-            for root, dirs, files in os.walk(path):
-                for filename in files:
-                    conn = sqlite3.connect(f'SqliteStorage/{session["username"]}/{filename}')
-                    c = conn.cursor()
-                    c.execute("SELECT name FROM sqlite_master WHERE type='table';")
-                    tables = c.fetchall()
-                    x = {
-                        "id": filename[:40],
-                        "name": filename[40:-3].upper(),
-                        "tables": tables,
-                        "tablelen": len(tables),
-                        "size": round(int(os.path.getsize(f"SqliteStorage/{ session['username']}/{filename}")) / 1048576, 2),
-                        "sizeb": os.path.getsize(f"SqliteStorage/{ session['username']}/{filename}")
-                    }
-                    dbdata["databases"].append(x)
+            for filename in listdir(path):
+                conn = sqlite3.connect(f'SqliteStorage/{session["username"]}/{filename}')
+                c = conn.cursor()
+                c.execute("SELECT name FROM sqlite_master WHERE type='table';")
+                tables = c.fetchall()
+                x = {
+                    "id": filename[:40],
+                    "name": filename[40:-3].upper(),
+                    "tables": tables,
+                    "tablelen": len(tables),
+                    "size": round(int(os.path.getsize(f"SqliteStorage/{ session['username']}/{filename}")) / 1048576, 2),
+                    "sizeb": os.path.getsize(f"SqliteStorage/{ session['username']}/{filename}")
+                }
+                dbdata["databases"].append(x)
             return render_template('index.html', databases=dbdata)
         else:
             return redirect(url_for("login"))
@@ -71,20 +71,19 @@ def databases():
         if "logedin" in session:
             path = f"SqliteStorage\\{session['username']}"
             dbdata = {"databases": []}
-            for root, dirs, files in os.walk(path):
-                for filename in files:
-                    conn = sqlite3.connect(f'SqliteStorage/{session["username"]}/{filename}')
-                    c = conn.cursor()
-                    c.execute("SELECT name FROM sqlite_master WHERE type='table';")
-                    tables = c.fetchall()
-                    x = {
-                        "id": filename[:40],
-                        "name": filename[40:-3].upper(),
-                        "tables": tables,
-                        "tablelen": len(tables),
-                        "size": round(int(os.path.getsize(f"SqliteStorage/{ session['username']}/{filename}")) / 1048576, 2)
-                    }
-                    dbdata["databases"].append(x)
+            for filename in listdir(path):
+                conn = sqlite3.connect(f'SqliteStorage/{session["username"]}/{filename}')
+                c = conn.cursor()
+                c.execute("SELECT name FROM sqlite_master WHERE type='table';")
+                tables = c.fetchall()
+                x = {
+                    "id": filename[:40],
+                    "name": filename[40:-3].upper(),
+                    "tables": tables,
+                    "tablelen": len(tables),
+                    "size": round(int(os.path.getsize(f"SqliteStorage/{ session['username']}/{filename}")) / 1048576, 2)
+                }
+                dbdata["databases"].append(x)
             return render_template('databases.html', databases=dbdata)
         else:
             return redirect(url_for("Four0Four"))
@@ -97,26 +96,25 @@ def apikey():
         if "logedin" in session:
             path = f"SqliteStorage\\{session['username']}"
             dbdata = {"databases": []}
-            for root, dirs, files in os.walk(path):
-                for filename in files:
-                    conn = sqlite3.connect(f'SqliteStorage/{session["username"]}/{filename}')
-                    c = conn.cursor()
-                    c.execute("SELECT name FROM sqlite_master WHERE type='table';")
-                    tables = c.fetchall()
-                    conn.close()
-                    conn = sqlite3.connect(f'SqliteStorage/apiKeys.db')
-                    c = conn.cursor()
-                    c.execute(f"SELECT * FROM Keys WHERE _id='{filename[:40]}'")
-                    keys = c.fetchall()
-                    x = {
-                        "id": filename[:40],
-                        "name": filename[40:-3].upper(),
-                        "tables": tables,
-                        "tablelen": len(tables),
-                        "keys": len(keys),
-                        "key": keys
-                    }
-                    dbdata["databases"].append(x)
+            for filename in listdir(path):
+                conn = sqlite3.connect(f'SqliteStorage/{session["username"]}/{filename}')
+                c = conn.cursor()
+                c.execute("SELECT name FROM sqlite_master WHERE type='table';")
+                tables = c.fetchall()
+                conn.close()
+                conn = sqlite3.connect(f'SqliteStorage/apiKeys.db')
+                c = conn.cursor()
+                c.execute(f"SELECT * FROM Keys WHERE _id='{filename[:40]}'")
+                keys = c.fetchall()
+                x = {
+                    "id": filename[:40],
+                    "name": filename[40:-3].upper(),
+                    "tables": tables,
+                    "tablelen": len(tables),
+                    "keys": len(keys),
+                    "key": keys
+                }
+                dbdata["databases"].append(x)
             return render_template('apikey.html', databases=dbdata)
         else:
             return redirect(url_for("Four0Four"))
