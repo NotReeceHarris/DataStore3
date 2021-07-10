@@ -43,7 +43,7 @@ app.register_blueprint(SqlExecutionApi)
 def index():
     if session != []:
         if "logedin" in session:
-            path = f"SqliteStorage\\{session['username']}"
+            path = f"SqliteStorage/{session['username']}"
             dbdata = {"databases": []}
             for filename in listdir(path):
                 conn = sqlite3.connect(f'SqliteStorage/{session["username"]}/{filename}')
@@ -69,7 +69,7 @@ def index():
 def databases():
     if session != []:
         if "logedin" in session:
-            path = f"SqliteStorage\\{session['username']}"
+            path = f"SqliteStorage/{session['username']}"
             dbdata = {"databases": []}
             for filename in listdir(path):
                 conn = sqlite3.connect(f'SqliteStorage/{session["username"]}/{filename}')
@@ -94,7 +94,7 @@ def databases():
 def apikey():
     if session != []:
         if "logedin" in session:
-            path = f"SqliteStorage\\{session['username']}"
+            path = f"SqliteStorage/{session['username']}"
             dbdata = {"databases": []}
             for filename in listdir(path):
                 conn = sqlite3.connect(f'SqliteStorage/{session["username"]}/{filename}')
