@@ -37,11 +37,39 @@ def Ipfilter(ip):
         else:
             return True
 
+@SqlExecutionApi.route('/api/test/', methods=["POST"])
+def apiConnectionTest():
+
+    if not Ipfilter(request.remote_addr):
+        return jsonify({"ReturnCode": 0, "ErrorCode":"You are not roblox"}), 200
+
+    Key = request.form["key"]
+    Username = request.form["username"]
+
+    conn = sqlite3.connect(f'SqliteStorage/apiKeys.db', timeout=10)
+    c = conn.cursor()
+    c.execute(f"SELECT * FROM Keys WHERE _key='{Key}'")
+    apikey = c.fetchall()
+    conn.close()
+    dbfile = ""
+    if apikey == []:
+        return jsonify({"ReturnCode": 0, "ErrorCode":"Invalid Api Key"}), 200
+    else:
+        path = f"SqliteStorage\\{Username}"
+        for root, dirs, files in os.walk(path):
+            for filename in files:
+                if filename.startswith(apikey[0]) and filename.endswith(".db"):
+                    dbfile = filename
+        if dbfile == None:
+            return jsonify({"ReturnCode": 0, "ErrorCode":"Username incorrect"}), 200
+        return jsonify({"ReturnCode": 1}), 200
+
+
 @SqlExecutionApi.route('/api/payload/post/', methods=["POST"])
 def apiPayloadPost():
     
     if not Ipfilter(request.remote_addr):
-        return jsonify({"ReturnCode": 0, "ErrorCode":"You are not roblox"}), 401
+        return jsonify({"ReturnCode": 0, "ErrorCode":"You are not roblox"}), 200
 
     Key = request.form["key"]
     Username = request.form["username"]
@@ -53,12 +81,10 @@ def apiPayloadPost():
     conn.close()
     dbfile = ""
     if apikey == []:
-        print("hi2")
-        return jsonify({"ReturnCode": 0, "ErrorCode":"Invalid Api Key"}), 401
+        return jsonify({"ReturnCode": 0, "ErrorCode":"Invalid Api Key"}), 200
     else:
         if Key == None or Payload == None:
-            print("hi4")
-            return jsonify({"ReturnCode": 0, "ErrorCode":"Missing Attributes"}), 505
+            return jsonify({"ReturnCode": 0, "ErrorCode":"Missing Attributes"}), 200
         else:
             path = f"SqliteStorage\\{Username}"
             for root, dirs, files in os.walk(path):
@@ -66,7 +92,7 @@ def apiPayloadPost():
                     if filename.startswith(apikey[0]) and filename.endswith(".db"):
                         dbfile = filename
             if dbfile == None:
-                return jsonify({"ReturnCode": 0, "ErrorCode":"Missing database files, message a system admin"}), 505
+                return jsonify({"ReturnCode": 0, "ErrorCode":"Username incorrect"}), 200
             conn = sqlite3.connect(f'SqliteStorage/{Username}/{dbfile}', timeout=10)
             c = conn.cursor()
             c.execute("SELECT name FROM sqlite_master WHERE type='table';")
@@ -85,7 +111,7 @@ def apiPayloadPost():
 @SqlExecutionApi.route('/api/payload/get/', methods=["POST"])
 def apiPayloadGet():
     if not Ipfilter(request.remote_addr):
-        return jsonify({"ReturnCode": 0, "ErrorCode":"You are not roblox"}), 401
+        return jsonify({"ReturnCode": 0, "ErrorCode":"You are not roblox"}), 200
 
     Key = request.form["key"]
     Username = request.form["username"]
@@ -101,11 +127,11 @@ def apiPayloadGet():
     dbfile = ""
 
     if apikey == []:
-        return jsonify({"ReturnCode": 0, "ErrorCode":"Invalid Api Key"}), 401
+        return jsonify({"ReturnCode": 0, "ErrorCode":"Invalid Api Key"}), 200
     else:
 
         if Key == None or Payload == None:
-            return jsonify({"ReturnCode": 0, "ErrorCode":"Missing Attributes"}), 505
+            return jsonify({"ReturnCode": 0, "ErrorCode":"Missing Attributes"}), 200
         else:
             path = f"SqliteStorage\\{Username}"
             for root, dirs, files in os.walk(path):
@@ -113,7 +139,7 @@ def apiPayloadGet():
                      if filename.startswith(apikey[0]) and filename.endswith(".db"):
                         dbfile = filename
             if dbfile == None:
-                return jsonify({"ReturnCode": 0, "ErrorCode":"Missing database files, message a system admin"}), 505
+                return jsonify({"ReturnCode": 0, "ErrorCode":"Username incorrect"}), 200
 
             conn = sqlite3.connect(f'SqliteStorage/{Username}/{dbfile}', timeout=10)
             c = conn.cursor()
