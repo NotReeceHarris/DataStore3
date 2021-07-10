@@ -221,7 +221,7 @@ def loginPost():
     c.execute(f'SELECT * FROM members WHERE _username="{request.form["username"]}"')
     response = c.fetchone()
 
-    if response != []:
+    if response != [] or request.form["password"] != None:
         if response[2] == hashlib.sha256(request.form["password"].encode('ascii')).hexdigest():
             session["logedin"] = True
             session["username"] = request.form["username"]
