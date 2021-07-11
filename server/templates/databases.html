@@ -331,7 +331,7 @@ https://github.com/NotReeceHarris/DataStore3
                     <div class="modal-body">
                       <form action="{{url_for("renameDb")}}" method="POST">
                         <div class="input-group mb-3">
-                          <input type="text" class="form-control" placeholder="New DataBase Name" name="newname" aria-label="New DataBase Name" aria-describedby="button-addon2">
+                          <input type="text" class="form-control" placeholder="New DataBase Name" name="newname" aria-label="New DataBase Name" aria-describedby="button-addon2" required>
                           <input type="hidden" name="oldname" value="{{x["name"]}}">
                           <input type="hidden" name="id" value="{{x["id"]}}">
                           <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Rename
