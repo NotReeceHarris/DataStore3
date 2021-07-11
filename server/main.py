@@ -33,7 +33,7 @@ from waitress import serve
 app = Flask(__name__)
 assets = Environment(app)
 app.permanent_session_lifetime = datetime.timedelta(days=365)
-app.secret_key =  "abc123#"#''.join(random.choice(string.ascii_letters) for i in range(100)).encode('ascii')
+app.secret_key =  ''.join(random.choice(string.ascii_letters) for i in range(10000)).encode('ascii')
 
 from sqlExecuter import SqlExecutionApi
 app.register_blueprint(SqlExecutionApi)
