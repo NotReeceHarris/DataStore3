@@ -306,7 +306,7 @@ def exportGet(name, id):
 def importPost():
     if session != []:
         if "logedin" in session:
-            if request.form['filename'] != None:
+            if request.form['filename'] != "":
                 f = request.files['file']
                 id = hashlib.sha1(f"{f.read()}{random.random()}".encode("ascii")).hexdigest()
                 name = f"{id}{request.form['filename'].lower()}.db"
