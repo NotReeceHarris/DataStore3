@@ -150,7 +150,7 @@ def newDataBase(name):
         if "logedin" in session:
             from datetime import date
             id = hashlib.sha1(f"{date.today()}{random.random()}".encode("ascii")).hexdigest()
-            open(f"SqliteStorage/{session['username']}/{id}{request.form['dbname']}.db", "w")
+            open(f"SqliteStorage/{session['username']}/{id}{request.form['dbname'].lower()}.db", "w")
             flash("Successfull Created Database")
             return redirect(url_for("databases"))
         else:
@@ -253,7 +253,7 @@ def deleteDb(name, id):
                 c.execute(f"DELETE FROM keys WHERE _id = '{id}';")
                 conn.commit()
                 conn.close()
-                os.remove(f'SqliteStorage/{session["username"]}/{id}{name}.db')
+                os.remove(f'SqliteStorage/{session["username"]}/{id}{name.lower()}.db')
                 return redirect(url_for("databases"))
             else:
                 return redirect(url_for("databases"))
@@ -267,12 +267,20 @@ def deleteDb(name, id):
 def renameDb():
     oldname = request.form["oldname"]
     newname = request.form["newname"]
-    id = request.form["id"]
+    username = session["username"]
+    dbid = request.form["id"]
     if session != []:
         if "logedin" in session:
             if oldname != None or id != None or newname != None:
-                os.rename(f'SqliteStorage/{session["username"]}/{id}{oldname}.db',f'SqliteStorage/{session["username"]}/{id}{newname}.db')
-                return redirect(url_for("databases"))
+                if True:
+                    os.rename(f'SqliteStorage/{username}/{dbid}{oldname.lower()}.db', f'SqliteStorage/{username}/{dbid}{newname}.db')
+                    flash("Successfull Rename")
+                    return redirect(url_for("databases"))
+                '''
+                except:
+                    flash("Rename failed")
+                    return redirect(url_for("databases"))
+                '''
             else:
                 return redirect(url_for("databases"))
         else:
@@ -286,7 +294,7 @@ def exportGet(name, id):
     if session != []:
         if "logedin" in session:
             if name != None and id != None:
-                return send_file(f'SqliteStorage/{session["username"]}/{id}{name}.db', as_attachment=True)
+                return send_file(f'SqliteStorage/{session["username"]}/{id}{name.lower()}.db', as_attachment=True)
             else:
                 return redirect(url_for("databases"))
         else:
@@ -300,7 +308,7 @@ def importPost():
         if "logedin" in session:
             f = request.files['file']
             id = hashlib.sha1(f"{f.read()}{random.random()}".encode("ascii")).hexdigest()
-            name = f"{id}{request.form['filename']}.db"
+            name = f"{id}{request.form['filename'].lower()}.db"
             f.save(f"SqliteStorage/{session['username']}/{name}")
             flash("Successfull Import")
             return redirect(url_for("databases"))
