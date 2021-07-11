@@ -140,7 +140,7 @@ https://github.com/NotReeceHarris/DataStore3
                       <div class="mb-3">
                         <form action = "{{url_for("newDataBase")}}" method = "POST">
                           <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="DataBase Name" name="dbname" aria-label="DataBase Name" aria-describedby="button-addon2">
+                            <input type="text" class="form-control" placeholder="DataBase Name" name="dbname" aria-label="DataBase Name" aria-describedby="button-addon2" required>
                             <button style="color:red; border-color: red;" class="btn btn-outline-secondary" type="submit" id="button-addon2">Submit
                             </button>
                           </div>
@@ -168,7 +168,7 @@ https://github.com/NotReeceHarris/DataStore3
                         <form action = "{{url_for("importPost")}}" method = "POST" enctype = "multipart/form-data">
                           <input class="form-control" type="file" id="formFile" name = "file" accept=".db">
                           <div class="input-group mb-3">
-                            <input style="border-top:none;" type="text" class="form-control" placeholder="DataBase Name" name="filename" aria-label="DataBase Name" aria-describedby="button-addon2">
+                            <input style="border-top:none;" type="text" class="form-control" placeholder="DataBase Name" name="filename" aria-label="DataBase Name" aria-describedby="button-addon2" required>
                             <button style="color:red; border-color: red;" class="btn btn-outline-secondary" type="submit" id="button-addon2">Submit
                             </button>
                           </div>
