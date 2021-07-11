@@ -148,11 +148,15 @@ def Four0Four():
 def newDataBase(name):
     if session != []:
         if "logedin" in session:
-            from datetime import date
-            id = hashlib.sha1(f"{date.today()}{random.random()}".encode("ascii")).hexdigest()
-            open(f"SqliteStorage/{session['username']}/{id}{request.form['dbname'].lower()}.db", "w")
-            flash("Successfull Created Database")
-            return redirect(url_for("databases"))
+            if request.form['dbname'] != "":
+                from datetime import date
+                id = hashlib.sha1(f"{date.today()}{random.random()}".encode("ascii")).hexdigest()
+                open(f"SqliteStorage/{session['username']}/{id}{request.form['dbname'].lower()}.db", "w")
+                flash("Successfull Created Database")
+                return redirect(url_for("databases"))
+            else:
+                flash("Failed Created Database")
+                return redirect(url_for("databases"))
         else:
             return redirect(url_for("Four0Four"))
     else:
@@ -247,7 +251,7 @@ def Signout():
 def deleteDb(name, id):
     if session != []:
         if "logedin" in session:
-            if name != None and id != None:
+            if name != "" and id != "":
                 conn = sqlite3.connect(f'SqliteStorage/apiKeys.db')
                 c = conn.cursor()
                 c.execute(f"DELETE FROM keys WHERE _id = '{id}';")
@@ -268,20 +272,17 @@ def renameDb():
     oldname = request.form["oldname"]
     newname = request.form["newname"]
     username = session["username"]
+    print(f"- {newname}| {newname == ''}")
     dbid = request.form["id"]
     if session != []:
         if "logedin" in session:
-            if oldname != None or id != None or newname != None:
+            if oldname != "" and id != "" and newname != "":
                 if True:
                     os.rename(f'SqliteStorage/{username}/{dbid}{oldname.lower()}.db', f'SqliteStorage/{username}/{dbid}{newname}.db')
                     flash("Successfull Rename")
                     return redirect(url_for("databases"))
-                '''
-                except:
-                    flash("Rename failed")
-                    return redirect(url_for("databases"))
-                '''
             else:
+                flash("Rename failed")
                 return redirect(url_for("databases"))
         else:
             return redirect(url_for("Four0Four"))
@@ -293,7 +294,7 @@ def renameDb():
 def exportGet(name, id):
     if session != []:
         if "logedin" in session:
-            if name != None and id != None:
+            if name != "" and id != "":
                 return send_file(f'SqliteStorage/{session["username"]}/{id}{name.lower()}.db', as_attachment=True)
             else:
                 return redirect(url_for("databases"))
