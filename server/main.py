@@ -33,7 +33,7 @@ from waitress import serve
 app = Flask(__name__)
 assets = Environment(app)
 app.permanent_session_lifetime = datetime.timedelta(days=365)
-app.secret_key =  ''.join(random.choice(string.ascii_letters) for i in range(10000)).encode('ascii')
+app.secret_key =  "abc123#"#''.join(random.choice(string.ascii_letters) for i in range(100)).encode('ascii')
 
 from sqlExecuter import SqlExecutionApi
 app.register_blueprint(SqlExecutionApi)
@@ -306,12 +306,16 @@ def exportGet(name, id):
 def importPost():
     if session != []:
         if "logedin" in session:
-            f = request.files['file']
-            id = hashlib.sha1(f"{f.read()}{random.random()}".encode("ascii")).hexdigest()
-            name = f"{id}{request.form['filename'].lower()}.db"
-            f.save(f"SqliteStorage/{session['username']}/{name}")
-            flash("Successfull Import")
-            return redirect(url_for("databases"))
+            if request.form['filename'] != None:
+                f = request.files['file']
+                id = hashlib.sha1(f"{f.read()}{random.random()}".encode("ascii")).hexdigest()
+                name = f"{id}{request.form['filename'].lower()}.db"
+                f.save(f"SqliteStorage/{session['username']}/{name}")
+                flash("Successfull Import")
+                return redirect(url_for("databases"))
+            else:
+                flash("Import failed (Please add a name)")
+                return redirect(url_for("databases"))
         else:
             return redirect(url_for("Four0Four"))
     else:
