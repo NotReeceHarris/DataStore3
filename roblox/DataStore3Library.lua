@@ -29,8 +29,8 @@ local function encode(dataFields)
 	local data = ""		-- Create encoded data save point
 	for k, v in pairs(dataFields) do		-- Encode the data into json
 		data = data .. ("&%s=%s"):format(
-		HttpService:UrlEncode(k),
-		HttpService:UrlEncode(v)
+			HttpService:UrlEncode(k),
+			HttpService:UrlEncode(v)
 		)
 	end
 	return data
@@ -39,10 +39,93 @@ end
 
 -------- Modula Functions
 
----------------------------------------------------------------------------------------------------------------- Test Function
+---------------------------------------------------------------------------------------------------------------- Test connection
 
-DataStore3.TestFunction = function()
-	print("Import Successfull")
+DataStore3.testConnection = function()
+	local url = "http://"..hostname.."/api/test/"	-- Craft a url from hostname
+
+	----------------- Encodes the data into a json form format
+
+	local dataFields = {		-- Create a DataField Containing Server details and payload
+		["key"] = apiKey;
+		["username"] = username;
+	}
+
+	local data = encode(dataFields)			-- Encode dataFields
+
+	----------------- Sends a post request to the database
+
+	local response = HttpService:PostAsync(url, data, Enum.HttpContentType.ApplicationUrlEncoded, false)		-- Send a PostAsync request to the server
+	local data = HttpService:JSONDecode(response)		-- Receive the data from the server
+
+	----------------- Print SQL error Code
+
+	if data.ReturnCode == 0 then		-- If Return code is 0 (Meaning an error)
+		print("Connection Failed -"..data.ErrorCode)		-- Print the sql error
+	elseif data.ReturnCode == 1 then
+		print("Connection success")
+	end
+
+	return data		-- Return server response
+end
+
+---------------------------------------------------------------------------------------------------------------- Create table
+
+DataStore3.CreateTable = function(tableName, primaryKey, dataType)
+	local url = "http://"..hostname.."/api/payload/post/"	-- Craft a url from hostname
+
+	----------------- Encodes the data into a json form format
+
+	local dataFields = {		-- Create a DataField Containing Server details and payload
+		["key"] = apiKey;
+		["username"] = username;
+		["payload"] = "CREATE TABLE "..tableName.."("..primaryKey.." "..dataType..", PRIMARY KEY("..primaryKey.."));";
+	}
+
+	local data = encode(dataFields)			-- Encode dataFields
+
+	----------------- Sends a post request to the database
+
+	local response = HttpService:PostAsync(url, data, Enum.HttpContentType.ApplicationUrlEncoded, false)		-- Send a PostAsync request to the server
+	local data = HttpService:JSONDecode(response)		-- Receive the data from the server
+
+	----------------- Print SQL error Code
+
+	if data.ReturnCode == 0 then		-- If Return code is 0 (Meaning an error)
+		print("!! SQL ERROR !! -"..data.ErrorCode)		-- Print the sql error
+	end
+
+	return data		-- Return server response
+end
+
+---------------------------------------------------------------------------------------------------------------- Delete table
+
+DataStore3.DeleteTable = function(tableName)
+	local url = "http://"..hostname.."/api/payload/post/"	-- Craft a url from hostname
+
+	----------------- Encodes the data into a json form format
+
+	local dataFields = {		-- Create a DataField Containing Server details and payload
+		["key"] = apiKey;
+		["username"] = username;
+		["payload"] = "DROP TABLE "..tableName..";";
+	}
+
+	local data = encode(dataFields)			-- Encode dataFields
+
+	----------------- Sends a post request to the database
+
+	local response = HttpService:PostAsync(url, data, Enum.HttpContentType.ApplicationUrlEncoded, false)		-- Send a PostAsync request to the server
+	local data = HttpService:JSONDecode(response)		-- Receive the data from the server
+
+	----------------- Print SQL error Code
+
+	if data.ReturnCode == 0 then		-- If Return code is 0 (Meaning an error)
+		print("!! SQL ERROR !! -"..data.ErrorCode)		-- Print the sql error
+	end
+
+
+	return data		-- Return server response
 end
 
 ---------------------------------------------------------------------------------------------------------------- Delete a column to table
