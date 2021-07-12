@@ -2,10 +2,16 @@
 
 ***
 
-# Easy to use dashbaord
+<h6>
+<details>
+  <summary>Easy to use dashbaord</summary>
+  
 ![ ](https://i.imgur.com/sLoI2HT.png)
 ![ ](https://i.imgur.com/cZ3geED.png)
 ![ ](https://i.imgur.com/oVbRYuv.png)
+
+</details>
+</h6>
 
 # DataStore3
 This is a modular way of storing data from your roblox experience using an SQL Database. 
