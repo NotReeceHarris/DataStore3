@@ -2,13 +2,15 @@
 
 ***
 
-<h6>
-<details>
-  <summary>Easy to use dashbaord</summary>
-  
-![ ](https://i.imgur.com/sLoI2HT.png)
-![ ](https://i.imgur.com/cZ3geED.png)
-![ ](https://i.imgur.com/oVbRYuv.png)
+## Docker run
 
-</details>
-</h6>
+### Build
+```bash
+docker build -t flask/flask_docker .
+```
+
+### Run
+change `80` to your selected port
+```bash
+docker run -d -p 80:80 flask/flask_docker.
+```
