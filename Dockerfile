@@ -1,4 +1,4 @@
-FROM python:3.9-alpine
+FROM python:3.9
 
 COPY requirements.txt /
 RUN pip3 install -r /requirements.txt
@@ -6,4 +6,4 @@ RUN pip3 install -r /requirements.txt
 COPY . /server
 WORKDIR /server
 
-ENTRYPOINT ["./gunicorn.sh"]
+CMD [ "python", "./server.py" ]
