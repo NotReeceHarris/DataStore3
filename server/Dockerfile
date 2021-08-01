@@ -1,9 +1,9 @@
 FROM python:3.9
 
 COPY requirements.txt /
-RUN pip3 install -r /requirements.txt
+RUN sudo python -m pip install -r /requirements.txt
 
 COPY . /server
 WORKDIR /server
 
-CMD [ "python", "./server.py" ]
+CMD [ "sudo", "python", "./server.py" ]
